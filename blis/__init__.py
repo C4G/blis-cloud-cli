@@ -16,11 +16,13 @@ def version():
 def status():
     try:
         click.echo(f"Total RAM: {psutil.virtual_memory().total / (1024.**3)} GB")
+        click.echo(f"Distribution: {blis_env.distro()}")
         click.echo(f"Passwordless sudo: {emoji.GREEN_CHECK if blis_env.can_sudo() else emoji.RED_X}")
         click.echo(f"Docker is installed: {emoji.GREEN_CHECK if blis_docker_util.installed() else emoji.RED_X}")
         click.echo(f"Docker Compose: {blis_docker_util.compose()}")
-    except:
+    except Exception as e:
         click.echo("There was a problem getting the status of BLIS!")
+        click.echo(e)
         exit(1)
 
 
