@@ -11,3 +11,7 @@ def distro():
         return result.stdout.decode('utf-8').strip().split("=")[1]
     else:
         return None
+
+SUPPORTED_DISTROS = set(["focal", "jammy"])
+def supported_distro():
+    return distro() in SUPPORTED_DISTROS
