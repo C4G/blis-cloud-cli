@@ -1,5 +1,7 @@
 import os
 import subprocess
+import pwd
+import grp
 
 def can_sudo():
     result = subprocess.run(["sudo", "-n", "echo", "hello"], capture_output=True)
@@ -9,8 +11,12 @@ def distro():
     result = subprocess.run(["grep", "DISTRIB_CODENAME", "/etc/lsb-release"], capture_output=True)
     if result.returncode == 0:
         return result.stdout.decode('utf-8').strip().split("=")[1]
-    else:
-        return None
+        
+def user():
+    return pwd.getpwuid(os.getuid())[0]
+
+def in_docker_grp():
+    return user() in grp.getgrnam("docker")[3]
 
 SUPPORTED_DISTROS = set(["focal", "jammy"])
 def supported_distro():

@@ -12,7 +12,7 @@ def compose_v1_installed():
 def compose_v2_installed():
     if not installed():
         return False
-    res = subprocess.run(["docker", "compose", "--help"], capture_output=True)
+    res = subprocess.run(["docker", "compose"], capture_output=True)
     return res.returncode == 0
 
 def compose():
