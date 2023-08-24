@@ -1,0 +1,13 @@
+{
+  "name": "blis-cloud-cli",
+  "build": {
+    "dockerfile": "Dockerfile.jammy",
+    "context": ".."
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2.3.1": {
+      "version": "latest",
+      "moby": true
+    }
+  }
+}
