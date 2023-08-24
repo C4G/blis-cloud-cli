@@ -11,5 +11,6 @@ def status():
     click.echo("containers:")
     for c in client.containers.list():
         click.echo(c.name)
+        click.echo(c.image)
 
 docker.add_command(status)
