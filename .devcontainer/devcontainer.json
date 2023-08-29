@@ -5,9 +5,19 @@
     "context": ".."
   },
   "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2.3.1": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2.4.0": {
       "version": "latest",
       "moby": true
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "EditorConfig.EditorConfig",
+        "ms-azuretools.vscode-docker",
+        "ms-python.autopep8",
+        "ms-python.python"
+      ]
     }
   }
 }
