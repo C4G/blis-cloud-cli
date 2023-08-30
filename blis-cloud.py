@@ -10,6 +10,7 @@ from util import docker_util as blis_docker_util
 from util import environment as blis_env
 from util import emoji
 from util import bash
+from commands import install as cmd_install
 
 
 @click.command()
@@ -39,12 +40,7 @@ def status():
 
 @click.command()
 def install():
-    out, err = bash.sudo("apt-get install -y robotfindskitten")
-    if err == None:
-        click.echo("Success!")
-    else:
-        click.echo("Failure!")
-        click.echo(err)
+    cmd_install.install()
 
 
 @click.group()
