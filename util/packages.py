@@ -2,6 +2,7 @@ import click
 
 from util import bash
 
+
 def apt_update():
     click.echo("Running apt-get update...")
     out, err = bash.sudo("DEBIAN_FRONTEND=noninteractive apt-get update")
