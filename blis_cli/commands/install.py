@@ -1,11 +1,11 @@
 import click
 import os
 
-from util import bash
-from util import docker_util as docker
-from util import emoji
-from util import environment as env
-from util import packages
+from blis_cli.util import bash
+from blis_cli.util import docker_util as docker
+from blis_cli.util import emoji
+from blis_cli.util import environment as env
+from blis_cli.util import packages
 
 
 def install():

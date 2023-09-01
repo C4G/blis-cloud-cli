@@ -1,9 +1,9 @@
 import click
 import psutil
 
-from util import emoji
-from util import environment as blis_env
-from util import docker_util as blis_docker_util
+from blis_cli.util import emoji
+from blis_cli.util import environment as blis_env
+from blis_cli.util import docker_util as blis_docker_util
 
 def run():
     try:

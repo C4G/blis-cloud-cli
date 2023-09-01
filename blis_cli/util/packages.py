@@ -1,6 +1,6 @@
 import click
 
-from util import bash
+from blis_cli.util import bash
 
 
 def apt_update():
