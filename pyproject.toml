@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "blis-cli"
+version = "0.0.1"
+description = "Command-line tool for the BLIS web-based lab information system."
+authors = ["Mitchell Rysavy <mitchell.rysavy@gmail.com>"]
+readme = "README.md"
+packages = [{include = "blis_cli"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+click = "~= 8.0.3"
+colorama = "~= 0.4.4"
+docker = "~= 5.0.3"
+psutil = "~= 5.9.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
