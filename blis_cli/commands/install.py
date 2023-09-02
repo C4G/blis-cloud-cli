@@ -35,7 +35,7 @@ def install():
                 "You must run this script as root or have passwordless sudo privileges.", fg="red")
         return 1
 
-    click.secho("You are ready to rock! " + emoji.GUITAR, fg="green")
+    click.secho("You are ready to rock!", fg="green")
 
 def install_docker():
     click.echo("Setting up Docker...")
