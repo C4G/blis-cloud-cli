@@ -1,3 +1,4 @@
+import click
 import os
 import yaml
 
@@ -25,9 +26,11 @@ def validate_compose():
         try:
             dcmp = yaml.safe_load(f)
         except yaml.YAMLError as e:
-            print(e)
+            click.echo(e, err=True)
             return False
 
-    print("TBD")
+    if 'name' not in dcmp:
+        click.echo("Missing 'name' in docker-compose.yml", err=True)
+        return False
     
     return True

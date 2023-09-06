@@ -1,0 +1,37 @@
+version: '3'
+
+#####
+# This file is an example docker-compose file for deploying BLIS to a cloud provider
+#
+
+# The name of the docker compose project
+name: c4gblis
+
+services:
+  app:
+    # This image is automatically built and pushed from the GitHub action in .github/workflows/ folder
+    image: "ghcr.io/c4g/blis:latest"
+    environment:
+      DB_HOST: 'db'
+      DB_PORT: '3306'
+      DB_USER: 'root'
+      DB_PASS: 'blis123'
+      # BLIS_SERVER_NAME: '[YOUR DOMAIN HERE]'
+    depends_on:
+      - db
+    volumes:
+      - blis-files:/var/www/blis/files
+    ports:
+      - "80:80"
+  db:
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password --innodb-strict-mode=OFF --sql-mode=""
+    restart: unless-stopped
+    volumes:
+      - blis-mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: blis123
+
+volumes:
+  blis-mysql:
+  blis-files:

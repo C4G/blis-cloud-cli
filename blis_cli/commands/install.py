@@ -55,6 +55,8 @@ def install():
             "docker-compose.yml is not valid.", fg="red")
         return 1
 
+    run_blis_and_setup_db()
+
     click.secho("You are ready to rock!", fg="green")
 
 
@@ -83,3 +85,15 @@ def download_docker_files():
     with open(config.compose_file(), "wb") as f:
         f.write(r.content)
     click.secho("Success!", fg="green")
+
+
+def run_blis_and_setup_db():
+    click.echo("Starting BLIS for the first time... ", nl=False)
+    out, err = bash.run(f"{docker.compose()} -f {config.compose_file()} up -d")
+    if err:
+        click.secho("Failed", fg="red")
+        click.echo(err, err=True)
+        return False
+    
+    click.secho("Success!", fg="green")
+    
