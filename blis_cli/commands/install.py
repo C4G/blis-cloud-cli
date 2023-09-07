@@ -16,7 +16,9 @@ def install():
     if not (env.in_docker_grp() and docker.installed()):
         if not (os.geteuid() == 0 or env.can_sudo()):
             click.secho(
-                "Docker must be installed. You must run this script as root or have passwordless sudo privileges.", fg="red")
+                "Docker must be installed. You must run this script as root or have passwordless sudo privileges.",
+                fg="red",
+            )
             return 1
 
         install_docker()
@@ -26,23 +28,25 @@ def install():
 
     # We might have Docker installed, but not be in the docker group.
     if docker.installed() and not env.in_docker_grp():
-        click.secho("You have Docker installed, but you are not in the docker group.",
-                    fg="yellow")
+        click.secho(
+            "You have Docker installed, but you are not in the docker group.",
+            fg="yellow",
+        )
         # Try to fix the problem...
-        if (env.can_sudo()):
+        if env.can_sudo():
             bash.sudo("usermod -aG docker $USER")
-            click.echo(
-                "Please log out and log back in, and run this command again.")
+            click.echo("Please log out and log back in, and run this command again.")
             return 0
         else:
             click.secho(
-                "You must run this script as root or have passwordless sudo privileges.", fg="red")
+                "You must run this script as root or have passwordless sudo privileges.",
+                fg="red",
+            )
         return 1
 
     # We have Docker installed and we are in the docker group.
     version = lib_docker.from_env().version()
-    click.echo(
-        f"Docker version: {click.style(version['Version'], fg='green')}")
+    click.echo(f"Docker version: {click.style(version['Version'], fg='green')}")
 
     config.make_basedir()
     if not os.path.exists(config.compose_file()):
@@ -51,8 +55,7 @@ def install():
     if config.validate_compose():
         click.echo("docker-compose.yml is valid.")
     else:
-        click.secho(
-            "docker-compose.yml is not valid.", fg="red")
+        click.secho("docker-compose.yml is not valid.", fg="red")
         return 1
 
     run_blis_and_setup_db()
@@ -61,16 +64,29 @@ def install():
 
 
 def install_docker():
-    click.echo("Setting up Docker... ", nl=False)
-    packages.remove(["docker", "docker-engine",
-                    "docker.io", "containerd", "runc"])
+    click.echo("Setting up Docker... ")
+    packages.remove(["docker", "docker-engine", "docker.io", "containerd", "runc"])
     packages.install(["ca-certificates", "curl", "gnupg", "lsb-release"])
     bash.sudo("mkdir -p /etc/apt/keyrings")
-    bash.run("curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o - | sudo tee /etc/apt/keyrings/docker.gpg >/dev/null")
-    bash.run("echo \"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null")
-    packages.install(["docker-ce", "docker-ce-cli", "containerd.io",
-                     "docker-compose-plugin", "docker-buildx-plugin"])
+    bash.run(
+        "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o - | sudo tee /etc/apt/keyrings/docker.gpg >/dev/null"
+    )
+    bash.run(
+        'echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null'
+    )
+    packages.apt_update()
+    packages.install(
+        [
+            "docker-ce",
+            "docker-ce-cli",
+            "containerd.io",
+            "docker-compose-plugin",
+            "docker-buildx-plugin",
+        ]
+    )
     bash.sudo("usermod -aG docker $USER")
+    bash.sudo("systemctl enable docker.service")
+    bash.sudo("systemctl start docker.service")
     click.secho("Success!", fg="green")
     click.echo("Please log out and log back in, and run this command again.")
 
@@ -78,7 +94,8 @@ def install_docker():
 def download_docker_files():
     click.echo("Downloading docker-compose.yml... ", nl=False)
     r = requests.get(
-        "https://raw.githubusercontent.com/C4G/BLIS/master/docker/docker-compose.yml")
+        "https://raw.githubusercontent.com/C4G/BLIS/master/docker/docker-compose.yml"
+    )
     if r.status_code != 200:
         click.secho("Failed to download docker-compose.yml", fg="red")
         return False
@@ -94,6 +111,5 @@ def run_blis_and_setup_db():
         click.secho("Failed", fg="red")
         click.echo(err, err=True)
         return False
-    
+
     click.secho("Success!", fg="green")
-    

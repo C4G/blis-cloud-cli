@@ -22,7 +22,10 @@ def user():
 
 
 def in_docker_grp():
-    return user() in grp.getgrnam("docker")[3]
+    try:
+        return user() in grp.getgrnam("docker")[3]
+    except KeyError:
+        return False
 
 
 SUPPORTED_DISTROS = set(["focal", "jammy"])

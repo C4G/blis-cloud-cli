@@ -5,13 +5,13 @@ import os
 import sys
 import psutil
 
-from blis_cli.util import docker_commands as blis_docker
 from blis_cli.util import docker_util as blis_docker_util
 from blis_cli.util import environment as blis_env
 from blis_cli.util import emoji
 from blis_cli.util import bash
 from blis_cli.commands import install as cmd_install
 from blis_cli.commands import status as cmd_status
+from blis_cli.commands import docker as cmd_docker_grp
 
 
 @click.command()
@@ -39,6 +39,6 @@ def main():
     entry_point.add_command(status)
     entry_point.add_command(version)
 
-    entry_point.add_command(blis_docker.docker)
+    entry_point.add_command(cmd_docker_grp.entrypoint, "docker")
 
     entry_point()

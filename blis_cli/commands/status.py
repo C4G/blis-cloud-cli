@@ -15,7 +15,7 @@ def run():
             f"Passwordless sudo: {emoji.GREEN_CHECK if blis_env.can_sudo() else emoji.RED_X}")
         click.echo(
             f"Docker is installed: {emoji.GREEN_CHECK if blis_docker_util.installed() else emoji.RED_X}")
-        click.echo(f"Docker Compose: {blis_docker_util.compose()}")
+        click.echo(f"Docker Compose: {emoji.GREEN_CHECK if blis_docker_util.compose() is not None else emoji.RED_X}")
         click.echo(
             f"User '{blis_env.user()}' in 'docker' group: {emoji.GREEN_CHECK if blis_env.in_docker_grp() else emoji.RED_X}")
         return 0

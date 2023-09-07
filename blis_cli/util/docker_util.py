@@ -26,7 +26,7 @@ def compose():
     elif compose_v1_installed():
         return "docker-compose"
     else:
-        raise Exception("Docker Compose is not installed.")
+        return None
 
 
 # Finds the _first_ container running the BLIS image.
