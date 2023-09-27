@@ -2,6 +2,7 @@ import click
 import os
 import docker as lib_docker
 import requests
+import shutil
 
 from blis_cli.util import bash
 from blis_cli.util import config
@@ -49,8 +50,9 @@ def install():
     click.echo(f"Docker version: {click.style(version['Version'], fg='green')}")
 
     config.make_basedir()
-    if not os.path.exists(config.compose_file()):
-        download_docker_files()
+    copy_docker_files()
+    # if not os.path.exists(config.compose_file()):
+    #     download_docker_files()
 
     if config.validate_compose():
         click.echo("docker-compose.yml is valid.")
@@ -104,9 +106,25 @@ def download_docker_files():
     click.secho("Success!", fg="green")
 
 
+def copy_docker_files():
+    click.echo("Copying docker-compose.yml to ~/.blis/...")
+    shutil.copy(
+        f"{os.path.dirname(__file__)}/../extra/docker-compose.yml",
+        config.compose_file(),
+    )
+
+
 def run_blis_and_setup_db():
     click.echo("Starting BLIS for the first time... ", nl=False)
     out, err = bash.run(f"{docker.compose()} -f {config.compose_file()} up -d")
+    if err:
+        click.secho("Failed", fg="red")
+        click.echo(err, err=True)
+        return False
+
+    # TODO: setup db
+
+    out, err = bash.run(f"{docker.compose()} -f {config.compose_file()} down")
     if err:
         click.secho("Failed", fg="red")
         click.echo(err, err=True)

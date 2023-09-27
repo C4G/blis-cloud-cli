@@ -15,11 +15,6 @@ from blis_cli.commands import docker as cmd_docker_grp
 
 
 @click.command()
-def version():
-    click.echo("BLIS Cloud Utility v0.0.1")
-
-
-@click.command()
 def status():
     exit(cmd_status.run())
 
@@ -29,6 +24,11 @@ def install():
     exit(cmd_install.install())
 
 
+@click.command()
+def start():
+    exit()
+
+
 @click.group()
 def entry_point():
     pass
@@ -36,8 +36,8 @@ def entry_point():
 
 def main():
     entry_point.add_command(install)
+    entry_point.add_command(start)
     entry_point.add_command(status)
-    entry_point.add_command(version)
 
     entry_point.add_command(cmd_docker_grp.entrypoint, "docker")
 
