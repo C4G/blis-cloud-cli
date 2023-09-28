@@ -5,6 +5,7 @@ import os
 import sys
 import psutil
 
+from blis_cli.util import config as blis_config
 from blis_cli.util import docker_util as blis_docker_util
 from blis_cli.util import environment as blis_env
 from blis_cli.util import emoji
@@ -26,7 +27,13 @@ def install():
 
 @click.command()
 def start():
-    exit()
+    out, err = bash.run(f"{blis_docker_util.compose()} -f {blis_config.compose_file()} up -d")
+    if err:
+        click.secho("Failed", fg="red")
+        click.echo(err, err=True)
+        exit(1)
+    if out:
+        click.echo(out)
 
 
 @click.group()
