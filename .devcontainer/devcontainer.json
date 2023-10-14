@@ -1,14 +1,14 @@
 {
   "name": "blis-cloud-cli",
-  "build": {
-    "dockerfile": "Dockerfile.jammy",
-    "context": ".."
-  },
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+  "onCreateCommand": ".devcontainer/on-create-command.sh",
   "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2.5.0": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2.7.0": {
       "version": "latest",
       "moby": true
-    }
+    },
+    "ghcr.io/devcontainers/features/sshd:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
   },
   "customizations": {
     "vscode": {
