@@ -1,4 +1,5 @@
 import click
+import glob
 import os
 import docker as lib_docker
 import shutil
@@ -26,10 +27,11 @@ def install():
     version = lib_docker.from_env().version()
     click.echo(f"Docker version: {click.style(version['Version'], fg='green')}")
 
-    if not click.confirm(
-        "BLIS has already been installed in ~/.blis. Do you want to overwrite the configuration?"
-    ):
-        return 0
+    if os.path.exists(config.compose_file()):
+        if not click.confirm(
+            "BLIS has already been installed in ~/.blis. Do you want to overwrite the configuration?"
+        ):
+            return 0
 
     config.make_basedir()
     copy_docker_files()
@@ -43,6 +45,7 @@ def install():
     run_blis_and_setup_db()
 
     click.secho("You are ready to rock!", fg="green")
+    click.echo ("Run `blis start` to start BLIS!")
 
 
 def copy_docker_files():
@@ -54,15 +57,37 @@ def copy_docker_files():
 
 
 def run_blis_and_setup_db():
-    click.echo("Starting BLIS for the first time... ", nl=False)
-    out, err = bash.run(f"{docker.compose()} -f {config.compose_file()} up -d")
+    click.echo("Starting BLIS database... ", nl=False)
+    out, err = bash.run(
+        f"{docker.compose()} -f {config.compose_file()} up -d --wait db"
+    )
     if err:
         click.secho("Failed", fg="red")
         click.echo(err, err=True)
         return False
 
-    # TODO: setup db
+    click.secho("Success!", fg="green")
 
+    db_password = config.compose_key("services.db.environment.MYSQL_ROOT_PASSWORD")
+    seed_failed = False
+
+    for file in glob.glob(f"{os.path.dirname(__file__)}/../extra/*.sql"):
+        click.echo(f"Seeding {os.path.basename(file)}... ", nl=False)
+        out, err = bash.run(
+            f"{docker.compose()} -f {config.compose_file()} exec -T db mysql -hdb -uroot -p{db_password} < {file}"
+        )
+        if err:
+            click.secho("Failed", fg="red")
+            click.echo(err, err=True, nl=False)
+            seed_failed = True
+        else:
+            click.secho("Success!", fg="green")
+
+    if seed_failed:
+        click.secho("Seeding database failed.", fg="yellow")
+        click.echo("BLIS might still start. Please check the errors for details.")
+
+    click.echo("Stopping database... ", nl=False)
     out, err = bash.run(f"{docker.compose()} -f {config.compose_file()} down")
     if err:
         click.secho("Failed", fg="red")

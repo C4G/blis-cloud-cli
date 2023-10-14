@@ -29,8 +29,25 @@ def validate_compose():
             click.echo(e, err=True)
             return False
 
-    if 'name' not in dcmp:
+    if "name" not in dcmp:
         click.echo("Missing 'name' in docker-compose.yml", err=True)
         return False
-    
+
     return True
+
+
+def compose_key(key: str):
+    contents = {}
+    with open(compose_file(), "r") as f:
+        try:
+            contents = yaml.safe_load(f)
+        except yaml.YAMLError as e:
+            click.echo(e, err=True)
+            return None
+
+    keys = key.split(".")
+    val = contents
+    for k in keys:
+        val = val[k]
+
+    return val

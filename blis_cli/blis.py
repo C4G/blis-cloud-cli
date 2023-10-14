@@ -13,6 +13,8 @@ from blis_cli.util import bash
 from blis_cli.commands import install as cmd_install
 from blis_cli.commands import status as cmd_status
 from blis_cli.commands import docker as cmd_docker_grp
+from blis_cli.commands import start as cmd_start
+from blis_cli.commands import stop as cmd_stop
 
 
 @click.command()
@@ -27,13 +29,12 @@ def install():
 
 @click.command()
 def start():
-    out, err = bash.run(f"{blis_docker_util.compose()} -f {blis_config.compose_file()} up -d")
-    if err:
-        click.secho("Failed", fg="red")
-        click.echo(err, err=True)
-        exit(1)
-    if out:
-        click.echo(out)
+    exit(cmd_start.run())
+
+
+@click.command()
+def stop():
+    exit(cmd_stop.run())
 
 
 @click.group()
@@ -45,6 +46,7 @@ def main():
     entry_point.add_command(install)
     entry_point.add_command(start)
     entry_point.add_command(status)
+    entry_point.add_command(stop)
 
     entry_point.add_command(cmd_docker_grp.entrypoint, "docker")
 
