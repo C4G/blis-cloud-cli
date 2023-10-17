@@ -1,12 +1,20 @@
 import click
 import psutil
 
+from blis_cli.util import config
 from blis_cli.util import emoji
 from blis_cli.util import environment as blis_env
 from blis_cli.util import docker_util as blis_docker_util
 
 def run():
     try:
+        if blis_docker_util.blis_container() != None:
+            click.secho("BLIS is running!", fg="green", nl=False)
+            click.echo(f" ({config.compose_key('services.app.image')})")
+        else:
+            click.secho("BLIS is NOT running!", fg="yellow")
+        click.echo("----------------")
+
         click.echo(
             f"Total RAM: {psutil.virtual_memory().total / (1024.**3)} GiB")
         click.echo(

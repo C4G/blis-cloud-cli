@@ -2,6 +2,8 @@ import docker
 import shutil
 import subprocess
 
+from blis_cli.util import config
+
 
 def installed():
     return shutil.which("docker") is not None
@@ -32,7 +34,8 @@ def compose():
 # Finds the _first_ container running the BLIS image.
 def blis_container(client=None):
     client = client or docker.from_env()
+    img_tag = config.compose_key("services.app.image")
     for container in client.containers.list():
-        if "ghcr.io/c4g/blis:latest" in container.image.tags:
+        if img_tag in container.image.tags:
             return container
     return None
