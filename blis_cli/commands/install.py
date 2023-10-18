@@ -45,7 +45,7 @@ def install():
     run_blis_and_setup_db()
 
     click.secho("You are ready to rock!", fg="green")
-    click.echo ("Run `blis start` to start BLIS!")
+    click.echo("Run `blis start` to start BLIS!")
 
 
 def copy_docker_files():

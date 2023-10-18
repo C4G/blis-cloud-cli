@@ -9,7 +9,7 @@ def run(command: str, root=False):
     if root:
         cmd = ["sudo"] + cmd
 
-    if ('BLIS_DEBUG' in os.environ and os.environ['BLIS_DEBUG'] == "true"):
+    if "BLIS_DEBUG" in os.environ and os.environ["BLIS_DEBUG"] == "true":
         click.echo("+ " + " ".join(cmd))
 
     proc = subprocess.run(cmd, capture_output=True)

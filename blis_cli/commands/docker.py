@@ -50,7 +50,7 @@ def install():
                 fg="red",
             )
         exit(1)
-        
+
     click.secho("Docker is installed!", fg="green")
 
 

@@ -10,14 +10,15 @@ def apt_update():
 def install(packages: list):
     click.echo(f"Installing packages: {', '.join(packages)}")
     return bash.sudo(
-        f"DEBIAN_FRONTEND=noninteractive apt-get install -y {' '.join(packages)}")
-
+        f"DEBIAN_FRONTEND=noninteractive apt-get install -y {' '.join(packages)}"
+    )
 
 
 def remove(packages: list):
     click.echo(f"Removing packages: {', '.join(packages)}")
     return bash.sudo(
-        f"DEBIAN_FRONTEND=noninteractive apt-get remove -y {' '.join(packages)}")
+        f"DEBIAN_FRONTEND=noninteractive apt-get remove -y {' '.join(packages)}"
+    )
 
 
 def is_installed(package: str):

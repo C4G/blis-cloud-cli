@@ -5,6 +5,7 @@ from blis_cli.util import config
 from blis_cli.util import emoji
 from blis_cli.util import docker_util as docker
 
+
 def run():
     click.echo("Starting BLIS database... ", nl=False)
     out, err = bash.run(

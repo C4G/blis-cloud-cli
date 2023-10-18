@@ -6,10 +6,14 @@ from blis_cli.util import config
 from blis_cli.util import emoji
 from blis_cli.util import docker_util
 
+
 def run():
     restart_blis = False
     if docker_util.blis_container() is not None:
-        click.secho("BLIS must be stopped in order to update to the latest version.", fg="yellow")
+        click.secho(
+            "BLIS must be stopped in order to update to the latest version.",
+            fg="yellow",
+        )
         if not click.confirm("Continue stopping BLIS?"):
             return 0
         click.echo("Stopping BLIS... ", nl=False)
@@ -18,9 +22,7 @@ def run():
         restart_blis = True
 
     click.echo("Updating BLIS... ", nl=False)
-    out, err = bash.run(
-        f"{docker_util.compose()} -f {config.compose_file()} pull app"
-    )
+    out, err = bash.run(f"{docker_util.compose()} -f {config.compose_file()} pull app")
     if err:
         click.secho("Failed", fg="red")
         click.echo(err, err=True)

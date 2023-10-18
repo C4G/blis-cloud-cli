@@ -44,11 +44,6 @@ def update():
     exit(cmd_update.run())
 
 
-@click.command()
-def logs():
-    exit(cmd_logs.run())
-
-
 @click.group()
 def entry_point():
     pass
@@ -60,8 +55,8 @@ def main():
     entry_point.add_command(status)
     entry_point.add_command(stop)
     entry_point.add_command(update)
-    entry_point.add_command(logs)
 
+    entry_point.add_command(cmd_logs.logs_group, "logs")
     entry_point.add_command(cmd_docker_grp.entrypoint, "docker")
 
     entry_point()

@@ -5,11 +5,10 @@ from blis_cli.util import config
 from blis_cli.util import emoji
 from blis_cli.util import docker_util as docker
 
+
 def run():
     click.echo("Stopping BLIS... ", nl=False)
-    out, err = bash.run(
-        f"{docker.compose()} -f {config.compose_file()} down"
-    )
+    out, err = bash.run(f"{docker.compose()} -f {config.compose_file()} down")
     if err:
         click.secho("Failed", fg="red")
         click.echo(err, err=True)
