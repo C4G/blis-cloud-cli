@@ -8,7 +8,13 @@ from blis_cli.util import emoji
 from blis_cli.util import environment
 from blis_cli.util import docker_util
 
-def run():
+
+@click.group
+def logs_group():
+    pass
+
+
+def get_container_log_file(filename):
     try:
         c = docker_util.blis_container()
 
@@ -22,23 +28,47 @@ def run():
             return 0
 
         with tempfile.TemporaryFile() as f:
-            # bits, stat = c.get_archive('/var/log/apache2/error.log')
-            bits, stat = c.get_archive('/var/www/blis/log/application.log')
+            bits, stat = c.get_archive(filename)
 
             for chunk in bits:
                 f.write(chunk)
 
             f.seek(0)
             tf = tarfile.open(fileobj=f)
-            m = tf.extractfile("application.log")
+            m = tf.extractfile(tf.getnames()[0])
             for chunk in m:
                 click.echo(chunk, nl=False)
 
     except docker.errors.NotFound as e:
-        click.echo("The log file was not found.")
+        click.echo("The log file was not found.", err=True)
         return 1
     except Exception as e:
-        click.echo(e.__class__)
-        click.echo("There was a problem getting the logs for BLIS!")
+        click.echo("There was a problem getting the logs for BLIS!", err=True)
         click.echo(e)
         return 1
+
+
+@click.command()
+def application():
+    exit(get_container_log_file("/var/www/blis/log/application.log"))
+
+
+@click.command()
+def database():
+    exit(get_container_log_file("/var/www/blis/log/database.log"))
+
+
+@click.command(name="apache2/access")
+def apache2_access():
+    exit(get_container_log_file("/var/log/apache2/access.log"))
+
+
+@click.command(name="apache2/error")
+def apache2_error():
+    exit(get_container_log_file("/var/log/apache2/error.log"))
+
+
+logs_group.add_command(application)
+logs_group.add_command(database)
+logs_group.add_command(apache2_access)
+logs_group.add_command(apache2_error)
