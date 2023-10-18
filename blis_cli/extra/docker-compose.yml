@@ -21,8 +21,10 @@ services:
       - db
     volumes:
       - blis-files:/var/www/blis/files
+      - blis-logs:/var/www/blis/log
     ports:
       - "80:80"
+
   db:
     image: mysql:5.7
     command: --default-authentication-plugin=mysql_native_password --innodb-strict-mode=OFF --sql-mode=""
@@ -32,10 +34,11 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: blis123
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-uroot", "-pblis123"]
       timeout: 20s
       retries: 10
 
 volumes:
   blis-mysql:
   blis-files:
+  blis-logs:

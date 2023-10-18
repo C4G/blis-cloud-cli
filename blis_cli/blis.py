@@ -10,10 +10,11 @@ from blis_cli.util import docker_util as blis_docker_util
 from blis_cli.util import environment as blis_env
 from blis_cli.util import emoji
 from blis_cli.util import bash
-from blis_cli.commands import install as cmd_install
-from blis_cli.commands import status as cmd_status
 from blis_cli.commands import docker as cmd_docker_grp
+from blis_cli.commands import install as cmd_install
+from blis_cli.commands import logs as cmd_logs
 from blis_cli.commands import start as cmd_start
+from blis_cli.commands import status as cmd_status
 from blis_cli.commands import stop as cmd_stop
 from blis_cli.commands import update as cmd_update
 
@@ -43,6 +44,11 @@ def update():
     exit(cmd_update.run())
 
 
+@click.command()
+def logs():
+    exit(cmd_logs.run())
+
+
 @click.group()
 def entry_point():
     pass
@@ -54,6 +60,7 @@ def main():
     entry_point.add_command(status)
     entry_point.add_command(stop)
     entry_point.add_command(update)
+    entry_point.add_command(logs)
 
     entry_point.add_command(cmd_docker_grp.entrypoint, "docker")
 
