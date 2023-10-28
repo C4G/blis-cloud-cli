@@ -118,11 +118,14 @@ def status():
 
     click.echo()
 
-    client = lib_docker.from_env()
-    click.echo("Containers:")
-    for c in client.containers.list():
-        click.echo(c.name)
-        click.echo(c.image)
+    try:
+        client = lib_docker.from_env()
+        click.echo("Containers:")
+        for c in client.containers.list():
+            click.echo(c.name)
+            click.echo(c.image)
+    except e:
+        click.secho("Could not connect to Docker.",fg="red")
 
 
 entrypoint.add_command(install)
