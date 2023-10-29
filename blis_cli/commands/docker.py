@@ -1,12 +1,13 @@
 import click
 import docker as lib_docker
+import getpass
 import os
 import requests
 import shutil
 
 from blis_cli.util import bash
 from blis_cli.util import config
-from blis_cli.util import docker_util as docker
+from blis_cli.util import docker_util
 from blis_cli.util import emoji
 from blis_cli.util import environment as env
 from blis_cli.util import packages
@@ -20,7 +21,7 @@ def entrypoint():
 @click.command
 def install():
     # If Docker is installed, and we are in the docker group, we will not need root privileges.
-    if not (env.in_docker_grp() and docker.installed()):
+    if not (env.in_docker_grp() and docker_util.installed()):
         if not (os.geteuid() == 0 or env.can_sudo()):
             click.secho(
                 "Docker must be installed. You must run this script as root or have passwordless sudo privileges.",
@@ -34,14 +35,14 @@ def install():
         exit(0)
 
     # We might have Docker installed, but not be in the docker group.
-    if docker.installed() and not env.in_docker_grp():
+    if docker_util.installed() and not env.in_docker_grp():
         click.secho(
             "You have Docker installed, but you are not in the docker group.",
             fg="yellow",
         )
         # Try to fix the problem...
         if env.can_sudo():
-            bash.sudo("usermod -aG docker $USER")
+            bash.sudo(f"usermod -aG docker {getpass.getuser()}")
             click.echo("Please log out and log back in, and run this command again.")
             exit(0)
         else:
@@ -75,7 +76,7 @@ def install_docker():
             "docker-buildx-plugin",
         ]
     )
-    bash.sudo("usermod -aG docker $USER")
+    bash.sudo(f"usermod -aG docker {getpass.getuser()}")
     bash.sudo("systemctl enable docker.service")
     bash.sudo("systemctl start docker.service")
     click.secho("Success!", fg="green")
@@ -103,29 +104,35 @@ def purge():
 
 @click.command
 def status():
-    click.echo(
-        f"Passwordless sudo: {emoji.GREEN_CHECK if env.can_sudo() else emoji.RED_X}"
-    )
-    click.echo(
-        f"Docker is installed: {emoji.GREEN_CHECK if docker.installed() else emoji.RED_X}"
-    )
-    click.echo(
-        f"Docker Compose: {emoji.GREEN_CHECK if docker.compose() is not None else emoji.RED_X}"
-    )
-    click.echo(
-        f"User '{env.user()}' in 'docker' group: {emoji.GREEN_CHECK if env.in_docker_grp() else emoji.RED_X}"
-    )
-
-    click.echo()
-
+    docker_ok = True
+    click.echo("Docker is accessible? ", nl=False)
     try:
         client = lib_docker.from_env()
-        click.echo("Containers:")
-        for c in client.containers.list():
-            click.echo(c.name)
-            click.echo(c.image)
-    except e:
-        click.secho("Could not connect to Docker.",fg="red")
+        client.containers.list()
+        click.secho("Yes", fg="green")
+    except Exception as e:
+        docker_ok = False
+        click.secho("No", fg="red")
+
+    cmd = "blis docker install"
+    if not env.can_sudo():
+        cmd = "sudo " + cmd
+
+    if not docker_ok:
+        click.echo("Docker is not accessible. Please run:")
+        click.echo("  " + cmd)
+        exit(0)
+
+    click.echo("Docker Compose is installed? ", nl=False)
+    if docker_util.compose_v2_installed():
+        click.secho("v2", fg="green")
+    elif docker_util.compose_v1_installed():
+        click.secho("v1", fg="green")
+    else:
+        click.secho("No", fg="red")
+        click.echo("Docker Compose is not installed. Please run:")
+        click.echo("  " + cmd)
+        exit(0)
 
 
 entrypoint.add_command(install)
