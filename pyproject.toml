@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "blis-cli"
+name = "blis-cloud-cli"
 version = "0.0.1"
 description = "Command-line tool for the BLIS web-based lab information system."
 authors = ["Mitchell Rysavy <mitchell.rysavy@gmail.com>"]
