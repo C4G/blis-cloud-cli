@@ -12,19 +12,13 @@ from blis_cli.util import packages
 
 
 def install():
-    if not docker.installed():
-        click.secho("You must install Docker before continuing. Please run:", fg="red")
-        click.echo("  sudo blis docker install")
+    try:
+        version = lib_docker.from_env().version()
+        click.echo(f"Docker version: {click.style(version['Version'], fg='green')}")
+    except Exception as e:
+        click.secho("There was a problem accessing Docker.", fg="red")
+        click.echo("Please run `blis docker status` and follow the instructions.")
         return 1
-
-    if not env.in_docker_grp():
-        click.secho("You must be in the Docker group to continue. Please run", fg="red")
-        click.echo("  sudo blis docker install")
-        return 1
-
-    # We have Docker installed and we are in the docker group.
-    version = lib_docker.from_env().version()
-    click.echo(f"Docker version: {click.style(version['Version'], fg='green')}")
 
     if os.path.exists(config.compose_file()):
         if not click.confirm(
