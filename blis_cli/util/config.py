@@ -12,10 +12,6 @@ def make_basedir():
         os.makedirs(basedir())
 
 
-def config_file():
-    return os.path.join(basedir(), "blis-cloud-config.yml")
-
-
 def compose_file():
     return os.path.join(basedir(), "docker-compose.yml")
 
