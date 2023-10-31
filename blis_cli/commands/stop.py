@@ -2,7 +2,6 @@ import click
 
 from blis_cli.util import bash
 from blis_cli.util import config
-from blis_cli.util import emoji
 from blis_cli.util import docker_util as docker
 
 

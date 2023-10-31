@@ -2,7 +2,6 @@ import click
 import psutil
 
 from blis_cli.util import config
-from blis_cli.util import emoji
 from blis_cli.util import environment as blis_env
 from blis_cli.util import docker_util as blis_docker_util
 
@@ -16,22 +15,38 @@ def run():
             click.secho("BLIS is NOT running!", fg="yellow")
         click.echo("----------------")
 
-        click.echo(f"Total RAM: {psutil.virtual_memory().total / (1024.**3)} GiB")
-        click.echo(
-            f"Supported distribution: {emoji.GREEN_CHECK if blis_env.supported_distro() else emoji.RED_X} ({blis_env.distro()})"
-        )
-        click.echo(
-            f"Passwordless sudo: {emoji.GREEN_CHECK if blis_env.can_sudo() else emoji.RED_X}"
-        )
-        click.echo(
-            f"Docker is installed: {emoji.GREEN_CHECK if blis_docker_util.installed() else emoji.RED_X}"
-        )
-        click.echo(
-            f"Docker Compose: {emoji.GREEN_CHECK if blis_docker_util.compose() is not None else emoji.RED_X}"
-        )
-        click.echo(
-            f"User '{blis_env.user()}' in 'docker' group: {emoji.GREEN_CHECK if blis_env.in_docker_grp() else emoji.RED_X}"
-        )
+        total_ram = psutil.virtual_memory().total / (1024.0**3)
+        click.echo(f"Total RAM: {total_ram} GiB")
+        if total_ram < 0.9:
+            click.secho(
+                "1GB of RAM is recommended to run BLIS. Things might not work as expected!",
+                fg="red",
+            )
+
+        click.echo("Supported distribution: ", nl=False)
+        if blis_env.supported_distro():
+            click.secho("Yes!", fg="green")
+        else:
+            click.secho("No", fg="red")
+            click.echo(
+                f"BLIS is supposed on these Ubuntu distributions: {','.join(blis_env.SUPPORTED_DISTROS)}"
+            )
+
+        click.echo("Passwordless sudo: ", nl=False)
+        if blis_env.can_sudo():
+            click.secho("Yes!", fg="green")
+        else:
+            click.secho("No", fg="red")
+
+        if (
+            blis_docker_util.blis_container() == None
+            and not blis_docker_util.installed()
+        ):
+            click.secho(
+                "Please run `blis docker status` to check the status of Docker on your machine.",
+                fg="yellow",
+            )
+
         return 0
     except Exception as e:
         click.echo("There was a problem getting the status of BLIS!")

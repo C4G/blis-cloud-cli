@@ -8,7 +8,7 @@ import psutil
 from blis_cli.util import config as blis_config
 from blis_cli.util import docker_util as blis_docker_util
 from blis_cli.util import environment as blis_env
-from blis_cli.util import emoji
+
 from blis_cli.util import bash
 from blis_cli.commands import docker as cmd_docker_grp
 from blis_cli.commands import install as cmd_install

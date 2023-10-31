@@ -8,7 +8,6 @@ import shutil
 from blis_cli.util import bash
 from blis_cli.util import config
 from blis_cli.util import docker_util
-from blis_cli.util import emoji
 from blis_cli.util import environment as env
 from blis_cli.util import packages
 
@@ -121,7 +120,7 @@ def status():
     if not docker_ok:
         click.echo("Docker is not accessible. Please run:")
         click.echo("  " + cmd)
-        exit(0)
+        return 0
 
     click.echo("Docker Compose is installed? ", nl=False)
     if docker_util.compose_v2_installed():
@@ -132,7 +131,7 @@ def status():
         click.secho("No", fg="red")
         click.echo("Docker Compose is not installed. Please run:")
         click.echo("  " + cmd)
-        exit(0)
+        return 0
 
 
 entrypoint.add_command(install)

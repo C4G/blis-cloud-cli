@@ -4,7 +4,6 @@ import tarfile
 import tempfile
 
 from blis_cli.util import config
-from blis_cli.util import emoji
 from blis_cli.util import environment
 from blis_cli.util import docker_util
 

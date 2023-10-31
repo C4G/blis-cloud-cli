@@ -7,7 +7,6 @@ import shutil
 from blis_cli.util import bash
 from blis_cli.util import config
 from blis_cli.util import docker_util as docker
-from blis_cli.util import emoji
 from blis_cli.util import environment as env
 from blis_cli.util import packages
 

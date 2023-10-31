@@ -33,9 +33,12 @@ def compose():
 
 # Finds the _first_ container running the BLIS image.
 def blis_container(client=None):
-    client = client or docker.from_env()
-    img_tag = config.compose_key("services.app.image")
-    for container in client.containers.list():
-        if img_tag in container.image.tags:
-            return container
+    try:
+        client = client or docker.from_env()
+        img_tag = config.compose_key("services.app.image")
+        for container in client.containers.list():
+            if img_tag in container.image.tags:
+                return container
+    except Exception as e:
+        return None
     return None
