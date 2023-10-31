@@ -10,13 +10,12 @@ name: c4gblis
 services:
   app:
     # This image is automatically built and pushed from the GitHub action in .github/workflows/ folder
-    image: "ghcr.io/mrysav/blis:latest"
+    image: "ghcr.io/c4g/blis:latest"
     environment:
       DB_HOST: 'db'
       DB_PORT: '3306'
       DB_USER: 'root'
       DB_PASS: 'blis123'
-      # BLIS_SERVER_NAME: '[YOUR DOMAIN HERE]'
     depends_on:
       - db
     volumes:
@@ -39,6 +38,6 @@ services:
       retries: 10
 
 volumes:
-  blis-mysql:
   blis-files:
   blis-logs:
+  blis-mysql:
