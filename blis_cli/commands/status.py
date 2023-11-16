@@ -16,7 +16,7 @@ def run():
         click.echo("----------------")
 
         total_ram = psutil.virtual_memory().total / (1024.0**3)
-        click.echo(f"Total RAM: {total_ram} GiB")
+        click.echo(f"Total RAM: {total_ram:.2f} GiB")
         if total_ram < 0.9:
             click.secho(
                 "1GB of RAM is recommended to run BLIS. Things might not work as expected!",
@@ -28,9 +28,10 @@ def run():
             click.secho("Yes!", fg="green")
         else:
             click.secho("No", fg="red")
-            click.echo(
-                f"BLIS is supposed on these Ubuntu distributions: {','.join(blis_env.SUPPORTED_DISTROS)}"
-            )
+            click.echo("BLIS is supported on these Ubuntu distributions: ", nl=False)
+            click.secho(", ".join(blis_env.SUPPORTED_DISTROS), fg="green")
+            click.echo("You have: ", nl=False)
+            click.secho(blis_env.distro(), fg="green")
 
         click.echo("Passwordless sudo: ", nl=False)
         if blis_env.can_sudo():
