@@ -2,15 +2,14 @@ version: '3'
 
 #####
 # This file is an example docker-compose file for deploying BLIS to a cloud provider
-#
+# This file is used as a template, but will be rewritten by the BLIS tool as necessary.
 
-# The name of the docker compose project
 name: c4gblis
 
 services:
   app:
-    # This image is automatically built and pushed from the GitHub action in .github/workflows/ folder
     image: "ghcr.io/c4g/blis:latest"
+    restart: unless-stopped
     environment:
       DB_HOST: 'db'
       DB_PORT: '3306'

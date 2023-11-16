@@ -8,22 +8,28 @@ from blis_cli.util import docker_util as blis_docker_util
 
 def run():
     try:
-        if blis_docker_util.blis_container() != None:
-            click.secho("BLIS is running!", fg="green", nl=False)
-            click.echo(f" ({config.compose_key('services.app.image')})")
+        click.echo("BLIS is installed: ", nl=False)
+        if config.validate_compose():
+            click.secho("Yes!", fg="green")
         else:
-            click.secho("BLIS is NOT running!", fg="yellow")
-        click.echo("----------------")
+            click.secho("No", fg="red")
+
+        click.echo("BLIS is running: ", nl=False)
+        if blis_docker_util.blis_container() != None:
+            click.secho("Yes!", fg="green")
+        else:
+            click.secho("No", fg="red")
 
         total_ram = psutil.virtual_memory().total / (1024.0**3)
-        click.echo(f"Total RAM: {total_ram:.2f} GiB")
+        click.echo("Total RAM: ", nl=False)
+        click.secho(f"{total_ram:.2f} GiB", fg="green")
         if total_ram < 0.9:
             click.secho(
                 "1GB of RAM is recommended to run BLIS. Things might not work as expected!",
                 fg="red",
             )
 
-        click.echo("Supported distribution: ", nl=False)
+        click.echo("Supported Ubuntu distribution: ", nl=False)
         if blis_env.supported_distro():
             click.secho("Yes!", fg="green")
         else:
