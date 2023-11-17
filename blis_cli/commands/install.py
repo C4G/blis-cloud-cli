@@ -37,8 +37,7 @@ def install():
 
     run_blis_and_setup_db()
 
-    click.secho("You are ready to rock!", fg="green")
-    click.echo("Run `blis start` to start BLIS!")
+    click.secho("BLIS has been successfully installed!", fg="green")
 
 
 def copy_docker_files():
@@ -80,8 +79,8 @@ def run_blis_and_setup_db():
         click.secho("Seeding database failed.", fg="yellow")
         click.echo("BLIS might still start. Please check the errors for details.")
 
-    click.echo("Stopping database... ", nl=False)
-    out, err = bash.run(f"{docker.compose()} -f {config.compose_file()} down")
+    click.echo("Starting BLIS... ", nl=False)
+    out, err = bash.run(f"{docker.compose()} -f {config.compose_file()} up -d app")
     if err:
         click.secho("Failed", fg="red")
         click.echo(err, err=True)
