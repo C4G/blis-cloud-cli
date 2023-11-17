@@ -17,6 +17,9 @@ def compose_file():
 
 
 def validate_compose():
+    if not os.path.exists(compose_file()):
+        return False
+
     dcmp = {}
     with open(compose_file(), "r") as f:
         try:
