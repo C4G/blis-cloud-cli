@@ -13,3 +13,7 @@ trim_trailing_whitespace = true
 charset = utf-8
 max_line_length = 79
 indent_size = 4
+
+[blis_cli/extra/templates/Caddyfile.j2]
+indent_style = tab
+indent_size = 4

@@ -7,6 +7,20 @@ version: '3'
 name: c4gblis
 
 services:
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+
   app:
     image: "ghcr.io/c4g/blis:latest"
     restart: unless-stopped
@@ -16,6 +30,7 @@ services:
       DB_USER: 'root'
       DB_PASS: 'blis123'
     depends_on:
+      - caddy
       - db
     volumes:
       - blis-files:/var/www/blis/files
@@ -40,3 +55,5 @@ volumes:
   blis-files:
   blis-logs:
   blis-mysql:
+  caddy_data:
+  caddy_config:

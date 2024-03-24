@@ -17,6 +17,7 @@ from blis_cli.commands import start as cmd_start
 from blis_cli.commands import status as cmd_status
 from blis_cli.commands import stop as cmd_stop
 from blis_cli.commands import update as cmd_update
+from blis_cli.commands import domain as cmd_domain_grp
 
 
 @click.command()
@@ -58,5 +59,6 @@ def main():
 
     entry_point.add_command(cmd_logs.logs_group, "logs")
     entry_point.add_command(cmd_docker_grp.entrypoint, "docker")
+    entry_point.add_command(cmd_domain_grp.entrypoint, "domain")
 
     entry_point()
