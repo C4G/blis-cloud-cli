@@ -2,15 +2,18 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 import os
 import shutil
 import subprocess
-import yaml
+import re
 
 from blis_cli.util import config
 
 
 jinja2 = Environment(
     loader=FileSystemLoader(f"{os.path.dirname(__file__)}/../extra/templates/"),
-    autoescape=select_autoescape()
+    autoescape=select_autoescape(),
 )
+
+CADDY_STANZA_START = re.compile("^https://(.+) {\s?$")
+
 
 def caddyfile():
     return os.path.join(config.basedir(), "Caddyfile")
@@ -40,3 +43,18 @@ def set_domains(domains: list):
             return None
     except Exception as e:
         return e
+
+
+def get_domains():
+    domains = []
+    try:
+        with open(os.path.join(config.basedir(), "Caddyfile"), "r") as f:
+            for line in f:
+                res = CADDY_STANZA_START.match(line)
+
+                if res:
+                    domains.append(res.groups()[0])
+    except Exception as e:
+        print(e)
+        return []
+    return domains
