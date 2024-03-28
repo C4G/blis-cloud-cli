@@ -35,8 +35,6 @@ services:
     volumes:
       - blis-files:/var/www/blis/files
       - blis-logs:/var/www/blis/log
-    ports:
-      - "80:80"
 
   db:
     image: mysql:5.7
