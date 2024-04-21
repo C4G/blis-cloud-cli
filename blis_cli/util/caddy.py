@@ -1,3 +1,4 @@
+import click
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 import os
 import shutil
@@ -5,6 +6,7 @@ import subprocess
 import re
 
 from blis_cli.util import config
+from blis_cli.util import docker_util
 
 
 jinja2 = Environment(
@@ -34,10 +36,10 @@ def install():
 
 
 def set_domains(domains: list):
-    template = jinja2.get_template("Caddyfile.j2")
-    rendered = template.render(domains=domains)
-
     try:
+        template = jinja2.get_template("Caddyfile.j2")
+        rendered = template.render(domains=domains)
+
         with open(os.path.join(config.basedir(), "Caddyfile"), "w") as f:
             f.write(rendered)
             return None
@@ -51,10 +53,11 @@ def get_domains():
         with open(os.path.join(config.basedir(), "Caddyfile"), "r") as f:
             for line in f:
                 res = CADDY_STANZA_START.match(line)
-
                 if res:
                     domains.append(res.groups()[0])
+    except FileNotFoundError as e:
+        return []
     except Exception as e:
-        print(e)
+        click.secho("Error reading Caddyfile: " + e, fg="red")
         return []
     return domains

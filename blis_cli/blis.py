@@ -12,7 +12,7 @@ from blis_cli.util import environment as blis_env
 from blis_cli.util import bash
 from blis_cli.commands import docker as cmd_docker_grp
 from blis_cli.commands import install as cmd_install
-from blis_cli.commands import logs as cmd_logs
+from blis_cli.commands import logs as cmd_logs_grp
 from blis_cli.commands import start as cmd_start
 from blis_cli.commands import status as cmd_status
 from blis_cli.commands import stop as cmd_stop
@@ -27,7 +27,7 @@ def status():
 
 @click.command()
 def install():
-    exit(cmd_install.install())
+    exit(cmd_install.run())
 
 
 @click.command()
@@ -57,8 +57,9 @@ def main():
     entry_point.add_command(stop)
     entry_point.add_command(update)
 
-    entry_point.add_command(cmd_logs.logs_group, "logs")
+    entry_point.add_command(cmd_logs_grp.entrypoint, "logs")
     entry_point.add_command(cmd_docker_grp.entrypoint, "docker")
     entry_point.add_command(cmd_domain_grp.entrypoint, "domain")
 
     entry_point()
+

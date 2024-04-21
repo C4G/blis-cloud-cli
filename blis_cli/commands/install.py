@@ -11,7 +11,7 @@ from blis_cli.util import environment as env
 from blis_cli.util import packages
 
 
-def install():
+def run():
     try:
         version = lib_docker.from_env().version()
         click.echo(f"Docker version: {click.style(version['Version'], fg='green')}")

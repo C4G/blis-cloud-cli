@@ -1,6 +1,7 @@
 import click
 import psutil
 
+from blis_cli.util import caddy
 from blis_cli.util import config
 from blis_cli.util import environment as blis_env
 from blis_cli.util import docker_util as blis_docker_util
@@ -15,10 +16,17 @@ def run():
             click.secho("No", fg="red")
 
         click.echo("BLIS is running: ", nl=False)
-        if blis_docker_util.blis_container() != None:
+        if blis_docker_util.blis_is_running():
             click.secho("Yes!", fg="green")
         else:
             click.secho("No", fg="red")
+
+        click.echo("Caddy is enabled: ", nl=False)
+        if caddy.installed():
+            click.secho("Yes!", fg="green")
+        else:
+            click.secho("No", fg="red")
+            click.secho("Custom domain support is disabled. Please run `blis domain add` to setup.", fg="red")
 
         total_ram = psutil.virtual_memory().total / (1024.0**3)
         click.echo("Total RAM: ", nl=False)

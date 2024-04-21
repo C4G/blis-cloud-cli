@@ -9,7 +9,7 @@ from blis_cli.util import docker_util
 
 
 @click.group
-def logs_group():
+def entrypoint():
     pass
 
 
@@ -67,7 +67,7 @@ def apache2_error():
     exit(get_container_log_file("/var/log/apache2/error.log"))
 
 
-logs_group.add_command(application)
-logs_group.add_command(database)
-logs_group.add_command(apache2_access)
-logs_group.add_command(apache2_error)
+entrypoint.add_command(application)
+entrypoint.add_command(database)
+entrypoint.add_command(apache2_access)
+entrypoint.add_command(apache2_error)
