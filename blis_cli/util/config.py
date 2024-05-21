@@ -79,6 +79,8 @@ def _load_template_yml():
 def compose_key(key: str, contents=None):
     if contents is None:
         contents = _open_compose()
+        if contents is None:
+            return None
 
     keys = key.split(".")
     val = contents

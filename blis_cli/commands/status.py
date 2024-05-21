@@ -9,8 +9,10 @@ from blis_cli.util import docker_util as blis_docker_util
 
 def run():
     try:
+        blis_installed = False
         click.echo("BLIS is installed: ", nl=False)
         if config.validate_compose():
+            blis_installed = True
             click.secho("Yes!", fg="green")
         else:
             click.secho("No", fg="red")
@@ -26,7 +28,8 @@ def run():
             click.secho("Yes!", fg="green")
         else:
             click.secho("No", fg="red")
-            click.secho("Custom domain support is disabled. Please run `blis domain add` to setup.", fg="red")
+            if blis_installed:
+                click.secho("Custom domain support is disabled. Please run `blis domain add` to setup.", fg="red")
 
         total_ram = psutil.virtual_memory().total / (1024.0**3)
         click.echo("Total RAM: ", nl=False)

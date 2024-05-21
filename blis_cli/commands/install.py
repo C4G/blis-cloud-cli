@@ -5,6 +5,7 @@ import docker as lib_docker
 import shutil
 
 from blis_cli.util import bash
+from blis_cli.util import caddy
 from blis_cli.util import config
 from blis_cli.util import docker_util as docker
 from blis_cli.util import environment as env
@@ -46,6 +47,8 @@ def copy_docker_files():
         f"{os.path.dirname(__file__)}/../extra/docker-compose.yml",
         config.compose_file(),
     )
+    click.echo("Creating ~/.blis/Caddyfile...")
+    caddy.set_domains([])
 
 
 def run_blis_and_setup_db():
