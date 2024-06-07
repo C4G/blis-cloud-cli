@@ -32,8 +32,14 @@ def run():
                 click.secho("Custom domain support is disabled. Please run `blis domain add` to setup.", fg="red")
 
         total_ram = psutil.virtual_memory().total / (1024.0**3)
+        swap_space = psutil.swap_memory().total / (1024.0**3)
         click.echo("Total RAM: ", nl=False)
-        click.secho(f"{total_ram:.2f} GiB", fg="green")
+        click.secho(f"{total_ram:.2f} GiB", fg="green", nl=False)
+        if swap_space > 0:
+            click.secho(f" (swap: {swap_space:.2f} GiB)", fg="green")
+        else:
+            click.echo()
+
         if total_ram < 0.9:
             click.secho(
                 "1GB of RAM is recommended to run BLIS. Things might not work as expected!",
