@@ -66,7 +66,7 @@ def run_blis_and_setup_db():
     db_password = config.compose_key("services.db.environment.MYSQL_ROOT_PASSWORD")
     seed_failed = False
 
-    for file in glob.glob(f"{os.path.dirname(__file__)}/../extra/*.sql"):
+    for file in sorted(glob.glob(f"{os.path.dirname(__file__)}/../extra/*.sql")):
         click.echo(f"Seeding {os.path.basename(file)}... ", nl=False)
         out, err = bash.run(
             f"{docker.compose()} -f {config.compose_file()} exec -T db mysql -hdb -uroot -p{db_password} < {file}"
