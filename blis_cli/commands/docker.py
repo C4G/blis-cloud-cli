@@ -17,7 +17,7 @@ def entrypoint():
     pass
 
 
-@click.command
+@click.command()
 def install():
     # If Docker is installed, and we are in the docker group, we will not need root privileges.
     if not (env.in_docker_grp() and docker_util.installed()):
@@ -82,7 +82,7 @@ def install_docker():
     click.echo("Please log out and log back in, and run this command again.")
 
 
-@click.command
+@click.command()
 def purge():
     if not env.can_sudo():
         click.secho("You must have root privileges to run this.", fg="red")
@@ -101,7 +101,7 @@ def purge():
     packages.apt_update()
 
 
-@click.command
+@click.command()
 def status():
     docker_ok = True
     click.echo("Docker is accessible? ", nl=False)
