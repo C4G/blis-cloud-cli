@@ -31,6 +31,11 @@ def run():
             click.secho(e, fg="red")
             return 1
 
+    if not config.volume_exists("blis-local"):
+        config.add_volume("blis-local")
+        config.add_mount("app", "blis-local", "/var/www/blis/local")
+        click.echo("Created blis-local volume.")
+
     if restart_blis:
         return docker_util.start_blis("app")
 

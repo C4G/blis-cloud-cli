@@ -101,6 +101,23 @@ def add_volume(volname, opts=None):
     _save_compose(contents)
 
 
+def volume_exists(volname):
+    contents = _open_compose()
+    return volname in contents["volumes"]
+
+
+def add_mount(svc: str, volname: str, path: str):
+    contents = _open_compose()
+    vols = contents["services"][svc]["volumes"]
+    if not vols:
+        vols = []
+    mount = f"{volname}:{path}"
+    if mount not in vols:
+        vols.append(mount)
+    contents["services"][svc]["volumes"] = vols
+    _save_compose(contents)
+
+
 def add_section_from_template(keyname: str):
     template_section = compose_key(keyname, _load_template_yml())
     contents = _open_compose()
