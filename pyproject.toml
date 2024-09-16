@@ -15,14 +15,14 @@ blis = "blis_cli.blis:main"
 
 
 [tool.poetry.dependencies]
-python = "^3.10"
-click = "~= 8.0.3"
-colorama = "~= 0.4.4"
-docker = "~= 5.0.3"
-Jinja2 = "~= 3.0.3"
-psutil = "~= 5.9.0"
-requests = "~= 2.25.1"
-PyYAML = "~= 6.0.0"
+python = "^3.8"
+click = "~= 8.1"
+colorama = "~= 0.4"
+docker = "~= 6.1"
+Jinja2 = "~= 3.1"
+psutil = "~= 5.9"
+requests = "~= 2.25"
+PyYAML = "~= 6.0"
 
 
 [build-system]
