@@ -8,7 +8,7 @@ from blis_cli.util import environment
 from blis_cli.util import docker_util
 
 
-@click.group
+@click.group()
 def entrypoint():
     pass
 

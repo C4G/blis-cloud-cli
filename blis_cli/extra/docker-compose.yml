@@ -1,5 +1,3 @@
-version: '3'
-
 #####
 # This file is an example docker-compose file for deploying BLIS to a cloud provider
 # This file is used as a template, but will be rewritten by the BLIS tool as necessary.
@@ -34,6 +32,7 @@ services:
       - db
     volumes:
       - blis-files:/var/www/blis/files
+      - blis-local:/var/www/blis/local
       - blis-logs:/var/www/blis/log
 
   db:
@@ -51,6 +50,7 @@ services:
 
 volumes:
   blis-files:
+  blis-local:
   blis-logs:
   blis-mysql:
   caddy_data:
