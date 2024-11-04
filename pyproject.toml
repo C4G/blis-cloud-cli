@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "blis-cloud-cli"
-version = "0.2.1"
+version = "0.2.2"
 description = "Command-line tool for the BLIS web-based lab information system."
 authors = ["Mitchell Rysavy <mitchell.rysavy@gmail.com>"]
 homepage = "https://c4gblis.org/"
