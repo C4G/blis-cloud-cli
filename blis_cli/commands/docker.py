@@ -111,6 +111,7 @@ def status():
         click.secho("Yes", fg="green")
     except Exception as e:
         docker_ok = False
+        print(e)
         click.secho("No", fg="red")
 
     cmd = "blis docker install"

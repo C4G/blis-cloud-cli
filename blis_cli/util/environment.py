@@ -28,7 +28,7 @@ def in_docker_grp():
         return False
 
 
-SUPPORTED_DISTROS = set(["focal", "jammy"])
+SUPPORTED_DISTROS = set(["focal", "jammy", "noble"])
 
 
 def supported_distro():
