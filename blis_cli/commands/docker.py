@@ -55,29 +55,11 @@ def install():
 
 
 def install_docker():
-    click.echo("Setting up Docker... ")
-    packages.remove(["docker", "docker-engine", "docker.io", "containerd", "runc"])
-    packages.install(["ca-certificates", "curl", "gnupg", "lsb-release"])
-    bash.sudo("mkdir -p /etc/apt/keyrings")
-    bash.run(
-        "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o - | sudo tee /etc/apt/keyrings/docker.gpg >/dev/null"
-    )
-    bash.run(
-        'echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null'
-    )
-    packages.apt_update()
-    packages.install(
-        [
-            "docker-ce",
-            "docker-ce-cli",
-            "containerd.io",
-            "docker-compose-plugin",
-            "docker-buildx-plugin",
-        ]
-    )
+    packages.install(["curl"])
+    click.echo("Installing Docker... ")
+    bash.sudo("curl -fsSL https://get.docker.com/ | sudo sh")
     bash.sudo(f"usermod -aG docker {getpass.getuser()}")
-    bash.sudo("systemctl enable docker.service")
-    bash.sudo("systemctl start docker.service")
+    bash.sudo("systemctl enable --now docker.service")
     click.secho("Success!", fg="green")
     click.echo("Please log out and log back in, and run this command again.")
 
@@ -111,8 +93,8 @@ def status():
         click.secho("Yes", fg="green")
     except Exception as e:
         docker_ok = False
-        print(e)
         click.secho("No", fg="red")
+        print(f"  {e}")
 
     cmd = "blis docker install"
     if not env.can_sudo():
