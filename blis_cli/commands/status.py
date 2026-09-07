@@ -48,7 +48,7 @@ def run():
 
         click.echo("Supported Ubuntu distribution: ", nl=False)
         if blis_env.supported_distro():
-            click.secho("Yes!", fg="green")
+            click.secho(f"Yes! ({blis_env.distro()})", fg="green")
         else:
             click.secho("No", fg="red")
             click.echo("BLIS is supported on these Ubuntu distributions: ", nl=False)
