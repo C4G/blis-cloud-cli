@@ -1,6 +1,6 @@
 [project]
 name = "blis-cloud-cli"
-version = "0.3.1"
+version = "0.3.3"
 description = "Command-line tool for the BLIS web-based lab information system."
 authors = [{ name = "Mitchell Rysavy", email = "mitchell.rysavy@gmail.com" }]
 requires-python = ">=3.8.0, <4"
